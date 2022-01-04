@@ -1,0 +1,78 @@
+<html>
+    <body onload="ff()">            
+            <table id="mainTable" border="2" style="border-color: blue;">
+                <tr id="rowSubject">
+                    <h1>EDIT PAGE</h1>
+                </tr>
+            </table>
+        
+        <script>      
+var curMovie = JSON.parse(sessionStorage.getItem('movie'));
+console.log(curMovie);
+creatRows(curMovie);
+
+function creatRows(curData) {
+    //creating new cells
+        var host = document.getElementById("mainTable");
+        
+  
+        // for (let index = 0; index <3; index++) {
+        var newRow = document.createElement("tr");
+        newRow.id=curData.id;
+        var newImgTd = document.createElement("td");
+        var newImg = document.createElement("img");
+        newImg.src = curData.image.medium;
+
+        var newNameTd = document.createElement("td");
+        var newNameTbx = document.createElement("input");
+        newNameTbx.type= "text";
+        newNameTbx.id="movieName";
+        newNameTbx.value= curData.name;
+        newNameTd.appendChild(newNameTbx);
+
+      
+        //create save
+        var newSaveTd = document.createElement("td");
+        var newSaveBtn = document.createElement("input");
+        newSaveBtn.type="button";
+        newSaveBtn.value="SAVE";
+        newSaveBtn.id="saveBtn";
+        // newSaveBtn.onclick= `updateMovie()`;
+        newSaveBtn.setAttribute("onclick", `updateMovie(${curData.id})`);
+        console.log(curData.id);
+        newSaveTd.appendChild(newSaveBtn);
+            
+        newImgTd.appendChild(newImg);
+        newRow.appendChild(newImgTd);
+        newRow.appendChild(newNameTd);
+        newRow.appendChild(newSaveTd);
+        
+        host.appendChild(newRow); 
+}
+
+async function ff() {
+    var resp = await fetch(`https://api.tvmaze.com/shows/${curMovie.id}`);
+    return resp;
+}
+
+async function updateMovie(curId) {  
+    var curMovie = JSON.parse(sessionStorage.getItem('movie'));
+    curMovie.name = document.getElementById("movieName").value;
+    /////
+    // var resp = await fetch (`https://api.tvmaze.com/shows/${curMovie.id}`, {
+    var resp = fetch (`https://api.tvmaze.com/shows/${curMovie.id}`, {
+    method: "put",
+    body: JSON.stringify(curMovie),
+    headers: {"content-type": "application/json"}
+    }    )
+    /////
+    var newName= document.getElementById("movieName").value;
+    var savedArr= [curId, newName];
+    sessionStorage.setItem('movie',JSON.stringify(curMovie));
+    window.location.href = "page1.html";
+}
+        
+        </script>
+        
+    </body>
+</html>

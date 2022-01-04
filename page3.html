@@ -1,0 +1,61 @@
+<html>
+    <body>
+            <h1>page 3</h1>
+            <table id="mainTable" border="2" style="border-color: blue;">
+                <tr id="rowSubject">
+                    <h1>CREATE PAGE</h1>
+                </tr>
+                <tr id="topics">
+                    <td>IMG</td>
+                    <td>Name</td>
+                    <td>SAVE</td>
+                </tr>
+                <tr id="topics">
+                    <td>
+                        <!-- <p><input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" style="display: none;"></p>
+                        <p><label for="file" style="cursor: pointer;">Upload Image</label></p> -->
+                        <p><img id="output" width="200" /></p>
+                        <input type="file" accept="image/*" onchange="uploadImage(event)" >
+                    </td>
+                    <td><input type="text" placeholder="enter movie name" id="name" onchange="enableSave()">
+                    </td>
+                    <td><input type="button" value="SAVE" id="myBtn" onclick="updateMovie()" disabled></td>
+                </tr>
+            </table>
+
+           
+
+            <script>
+var image;
+            function uploadImage(params) {
+                image = document.getElementById('output');
+                image.src = URL.createObjectURL(event.target.files[0]);
+            }
+
+            function enableSave() {
+            document.getElementById("myBtn").disabled = false;
+            }
+
+            function updateMovie() {
+                console.log("image.src:");
+                // console.log(image.src);
+                var curMovie={
+                    id: 0,
+                    name: document.getElementById("name").value,
+                    image:{
+                        medium: image.src+"."+image.src
+                        // medium:"118777-OTYJWM-429.jpg"
+                    },
+
+                };
+
+                sessionStorage.setItem('movie',JSON.stringify(curMovie));         
+                window.location.href = "index.html"; 
+            }
+       
+            
+
+            </script>
+            
+    </body>
+</html>
